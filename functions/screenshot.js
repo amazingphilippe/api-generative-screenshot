@@ -68,8 +68,12 @@ async function screenshot(url, { format, viewport, dpr = 1, withJs = true, wait,
     options.quality = 80;
   }
 
-  let svg = await page.$("main svg");
-  let output = await svg.screenshot(options);
+  let subject = page;
+  if (elementHandle) {
+    subject = page.$(elementHandle)
+  }
+
+  let output = await subject.screenshot(options);
 
   await browser.close();
 
@@ -179,6 +183,7 @@ async function handler(event, context) {
     }
 
     let output = await screenshot(url, {
+      elementHandle,
       format,
       viewport,
       dpr,
