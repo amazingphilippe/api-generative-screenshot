@@ -180,7 +180,6 @@ async function handler(event, context) {
     }
 
     let output = await screenshot(url, {
-      target,
       format,
       viewport,
       dpr,
