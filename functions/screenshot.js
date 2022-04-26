@@ -51,16 +51,19 @@ async function screenshot(url, { format, viewport, dpr = 1, withJs = true, wait,
   // let statusCode = response.status();
   // TODO handle 4xx/5xx status codes better
 
+    let bbox = await page.$("main svg").boundingBox()
+    console.log(bbox);
+
   let options = {
     type: format,
     encoding: "base64",
     fullPage: false,
     captureBeyondViewport: false,
     clip: {
-      x: 0,
-      y: 0,
-      width: viewport[0],
-      height: viewport[1],
+      x: bbox.x,
+      y: bbox.y,
+      width: bbox.width,
+      height: bbox.height,
     }
   };
 
@@ -68,9 +71,7 @@ async function screenshot(url, { format, viewport, dpr = 1, withJs = true, wait,
     options.quality = 80;
   }
 
-
-  let svg = await page.$("main svg");
-  let output = await svg.screenshot(options);
+  let output = await page.screenshot(options);
 
   await browser.close();
 
