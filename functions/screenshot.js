@@ -11,7 +11,7 @@ function isFullUrl(url) {
   }
 }
 
-async function screenshot(url, { elementHandle = false, format, viewport, dpr = 1, withJs = true, wait, timeout = 8500 }) {
+async function screenshot(url, { format, viewport, dpr = 1, withJs = true, wait, timeout = 8500 }) {
   // Must be between 3000 and 8500
   timeout = Math.min(Math.max(timeout, 3000), 8500);
 
@@ -68,12 +68,9 @@ async function screenshot(url, { elementHandle = false, format, viewport, dpr = 
     options.quality = 80;
   }
 
-  let subject = page;
-  if (elementHandle) {
-    subject = page.$(elementHandle)
-  }
 
-  let output = await subject.screenshot(options);
+  let svg = await page.$("main svg");
+  let output = await svg.screenshot(options);
 
   await browser.close();
 
@@ -183,7 +180,7 @@ async function handler(event, context) {
     }
 
     let output = await screenshot(url, {
-      elementHandle,
+      target,
       format,
       viewport,
       dpr,
@@ -192,7 +189,7 @@ async function handler(event, context) {
     });
 
     // output to Function logs
-    console.log(url, elementHandle, format, { viewport }, { size }, { dpr }, { aspectratio });
+    console.log(url, format, { viewport }, { size }, { dpr }, { aspectratio });
 
     return {
       statusCode: 200,
