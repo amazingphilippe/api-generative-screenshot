@@ -51,8 +51,9 @@ async function screenshot(url, { format, viewport, dpr = 1, withJs = true, wait,
   // let statusCode = response.status();
   // TODO handle 4xx/5xx status codes better
 
-    let svg = await page.$("main svg");
-    let bbox = await svg.boundingBox()
+  let svg = await page.$("main svg");
+  let bbox = await svg.boundingBox()
+  console.log("main svg ", bbox);
 
   let options = {
     type: format,
